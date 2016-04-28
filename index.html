@@ -10,8 +10,9 @@
       // The 3 longest arrays are being saved in an array of objects that is sorted in a descending order by lenght.
       // If the array contains more than 3 elements, then the shortest palindromes are being removed from the array.
 
-      function expand (s,i,j) {
+      function expand(s,i,j) {
         var n = s.length;
+
         while (i >= 0 && j <= n-1 && s[i] == s[j]) {
           i--;
           j++;
@@ -19,13 +20,19 @@
         return s.substr(i+1, j-i-1);
       }
 
-      function logestPalindrome (s) {
+      function compare(a, b) {
+        if (a.length > b.length) return -1;
+        if (a.length < b.length) return 1;
+        return 0;
+      }
+
+      function logestPalindrome(s) {
         var n = s.length;
-        if (n == 0) return "";
         var longest = s.substr(0,1);
-
         var palindromeArray = new Array();
+        var currentLength = 0;
 
+        if (n == 0) return "";
         for (var i = 0; i < n-1; i++) {
           p1 = expand(s,i,i); 
           if(p1.length > longest.length) {
@@ -41,35 +48,27 @@
           }
         }
         
-        var currentLength = 0;
-
         do {
           palindromeArray.shift();
           currentLenght = palindromeArray.length;
-        } while(palindromeArray.length > 3 && currentLength !== 3);
-
-        function compare(a, b) {
-          if (a.length > b.length) return -1;
-          if (a.length < b.length) return 1;
-          return 0;
-        }
+        } while (palindromeArray.length > 3 && currentLength !== 3);
 
         palindromeArray.sort(compare);
 
         for (var item of palindromeArray) {
           console.log("Text: " + item.palindrome + ", Index: " + item.index + ", Length: " + item.length);
         }
-
         return palindromeArray;
       }
 
       function test(callback) {
         var res = callback("sqrrqabccbatudefggfedvwhijkllkjihxymnnmzpop");
+        
         if (res.length === 3) console.log("Test passed!");
       }
 
-      // logestPalindrome("sqrrqabccbatudefggfedvwhijkllkjihxymnnmzpop");
       test(logestPalindrome);
+      // logestPalindrome("sqrrqabccbatudefggfedvwhijkllkjihxymnnmzpop");
 
       // Output 
       // Text: hijkllkjih, Index: 23, Length: 10
